@@ -1,1 +1,106 @@
-
+[
+  {
+    "key": "c_user",
+    "value": "61587920255548",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1808465992.467593
+  },
+  {
+    "key": "xs",
+    "value": "33%3A_IsRbwSYlyOqfQ%3A2%3A1776929992%3A-1%3A-1",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1808465992.468157
+  },
+  {
+    "key": "fr",
+    "value": "0kXWEtP9gAFUltwqr.AWeVDbxWWmdM5UVpGjgRn27WyZsrFZQ_I6JJykJ8Yi918pNdMds.Bp0aPF..AAA.0.0.Bp6drA.AWcLIN8CMYSITs_Uid6_BeIoacE",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1784709566.585852
+  },
+  {
+    "key": "datr",
+    "value": "xaPRaWUOqBsZX3yQxVda1oKk",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1809906629.722362
+  },
+  {
+    "key": "sb",
+    "value": "xaPRaeLu_CXcG0Ao9IcNZSc9",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1811489992.468053
+  },
+  {
+    "key": "dbln",
+    "value": "%7B%2261587920255548%22%3A%22GZYzXahm%22%7D",
+    "domain": "facebook.com",
+    "path": "/login/device-based/",
+    "hostOnly": false,
+    "expirationDate": 1784705994.867065
+  },
+  {
+    "key": "fbl_st",
+    "value": "101728501%3BT%3A29615559",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1808469567
+  },
+  {
+    "key": "locale",
+    "value": "en_US",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1777534382.654582
+  },
+  {
+    "key": "pas",
+    "value": "61584274422343%3A1a6A4YEUsC%2C61587920255548%3AkRpZGzlFwY",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1811493566.586366
+  },
+  {
+    "key": "ps_l",
+    "value": "1",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1811489876.505292
+  },
+  {
+    "key": "ps_n",
+    "value": "1",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1811489876.505406
+  },
+  {
+    "key": "vpd",
+    "value": "v1%3B668x360x1.7004296779632568",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1782117567
+  },
+  {
+    "key": "wl_cbv",
+    "value": "v2%3Bclient_version%3A3150%3Btimestamp%3A1776933568",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "expirationDate": 1784709567
+  }
+]
