@@ -37,7 +37,7 @@ module.exports = {
         description: "Sends welcome messages when new members join",
         eventTypes: ["event"], // Facebook event type for participant changes
         priority: 10,
-        enabled: false,
+        enabled: true,
     },
 
     /**
