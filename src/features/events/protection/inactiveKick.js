@@ -1,6 +1,8 @@
 "use strict";
 
 const trackers = new Map();
+
+// 🔁 palitan mo lang value dito
 const INACTIVE_TIME = 3 * 24 * 60 * 60 * 1000; // 3 days
 
 function makeKey(threadID, userID) {
@@ -10,16 +12,17 @@ function makeKey(threadID, userID) {
 module.exports = {
   config: {
     name: "inactiveKick",
-    description: "Silent kick if no message within 3 days",
+    description: "Kick inactive users",
     eventTypes: ["event", "message"],
-    priority: 10,
     enabled: true,
   },
 
   async execute({ api, event, config, logger }) {
     const botID = api.getCurrentUserID();
 
-    // ===== MAY NA-ADD =====
+    // =========================
+    // 🟢 USER ADDED
+    // =========================
     if (event.logMessageType === "log:subscribe") {
       const threadID = event.threadID;
       const added = event.logMessageData?.addedParticipants || [];
@@ -33,7 +36,7 @@ module.exports = {
 
         const key = makeKey(threadID, userID);
 
-        // clear old timer
+        // remove old timer
         if (trackers.has(key)) {
           clearTimeout(trackers.get(key));
           trackers.delete(key);
@@ -42,7 +45,7 @@ module.exports = {
         // start timer
         const timer = setTimeout(async () => {
           try {
-            await api.removeUserFromGroup(userID, threadID);
+            await api.gcmember("remove", userID, threadID);
           } catch (e) {
             logger.debug("InactiveKick", e.message);
           } finally {
@@ -56,7 +59,9 @@ module.exports = {
       return;
     }
 
-    // ===== NAG CHAT =====
+    // =========================
+    // 💬 USER CHAT
+    // =========================
     if (event.body) {
       const userID = event.senderID;
       const threadID = event.threadID;
@@ -66,7 +71,7 @@ module.exports = {
 
       const key = makeKey(threadID, userID);
 
-      // cancel timer (safe na siya)
+      // cancel timer if nag chat
       if (trackers.has(key)) {
         clearTimeout(trackers.get(key));
         trackers.delete(key);
