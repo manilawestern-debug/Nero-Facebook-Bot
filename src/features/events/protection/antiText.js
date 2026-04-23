@@ -5,29 +5,24 @@ const warnings = new Map();
 module.exports = {
   config: {
     name: "antiText",
-    description: "Warn then kick (text only, media allowed)",
     eventTypes: ["message"],
-    priority: 20,
     enabled: true,
   },
 
   async execute({ api, event, config, logger }) {
-    if (!event.isGroup) return;
-
-    // ✅ IGNORE kung walang text (image, video, sticker, etc.)
-    if (!event.body) return;
-
     const userID = event.senderID;
     const threadID = event.threadID;
+
+    // ignore admin
+    if (config.isAdmin(userID)) return;
 
     // ignore bot
     if (userID == api.getCurrentUserID()) return;
 
-    // admin safe
-    if (config.isAdmin(userID)) return;
+    // allow images/videos only
+    if (!event.body) return;
 
     const key = `${threadID}-${userID}`;
-
     let count = warnings.get(key) || 0;
     count++;
     warnings.set(key, count);
@@ -40,8 +35,8 @@ module.exports = {
         );
       }
 
-      // ❌ second text → kick (silent)
-      await api.removeUserFromGroup(userID, threadID);
+      // second time = kick
+      await api.gcmember("remove", userID, threadID);
 
       warnings.delete(key);
 
