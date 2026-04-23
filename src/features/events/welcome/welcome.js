@@ -18,8 +18,7 @@
  * You can customize these or add more variations
  */
 const welcomeTemplates = [
-    "👋 Welcome to the group, {name}!\n\nRules Bawal mag chat chat off lang tayo if pasaway first warning !",
-    
+    "👋 Welcome sa group, {name}!\n\n📌 RULES:\n• Bawal mag chat (off-topic)\n• Video lang ang allowed\n• Kapag pasaway: first warning!",
 ];
 
 /**
