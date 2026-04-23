@@ -1,34 +1,52 @@
 "use strict";
 
-module.exports.config = {
+const warnings = new Map();
+
+module.exports = {
+  config: {
     name: "antiText",
+    description: "Warn then kick (text only, media allowed)",
     eventTypes: ["message"],
-    priority: 10,
+    priority: 20,
     enabled: true,
-};
+  },
 
-module.exports.execute = async function ({ api, event, config }) {
-    const { threadID, senderID, body, attachments } = event;
+  async execute({ api, event, config, logger }) {
+    if (!event.isGroup) return;
 
-    const admins = config.bot.admins || [];
-    const superAdmins = config.bot.superAdmins || [];
+    // ✅ IGNORE kung walang text (image, video, sticker, etc.)
+    if (!event.body) return;
 
-    // skip admins
-    if (admins.includes(senderID) || superAdmins.includes(senderID)) {
-        return;
+    const userID = event.senderID;
+    const threadID = event.threadID;
+
+    // ignore bot
+    if (userID == api.getCurrentUserID()) return;
+
+    // admin safe
+    if (config.isAdmin(userID)) return;
+
+    const key = `${threadID}-${userID}`;
+
+    let count = warnings.get(key) || 0;
+    count++;
+    warnings.set(key, count);
+
+    try {
+      if (count === 1) {
+        return api.sendMessage(
+          "⚠️ Bawal text dito. Next = kick.",
+          threadID
+        );
+      }
+
+      // ❌ second text → kick (silent)
+      await api.removeUserFromGroup(userID, threadID);
+
+      warnings.delete(key);
+
+    } catch (err) {
+      logger.debug("AntiText", err.message);
     }
-
-    // detect text only
-    if (body && (!attachments || attachments.length === 0)) {
-        try {
-            await api.sendMessage(
-                "❌ Bawal text dito! Image/Video lang.",
-                threadID
-            );
-
-            await api.removeUserFromGroup(senderID, threadID);
-        } catch (e) {
-            console.log(e);
-        }
-    }
+  },
 };
