@@ -18,10 +18,8 @@
  * You can customize these or add more variations
  */
 const welcomeTemplates = [
-    "👋 Welcome to the group, {name}!\n\nWe're glad to have you here. Feel free to introduce yourself!",
-    "🎉 Hey {name}, welcome aboard!\n\nMake yourself at home and don't be shy to participate in our conversations!",
-    "✨ {name} just joined the party!\n\nWelcome to the group! We hope you enjoy your stay.",
-    "🌟 A warm welcome to {name}!\n\nWe're excited to have you as part of our community!",
+    "👋 Welcome to the group, {name}!\n\nRules Bawal mag chat chat off lang tayo if pasaway first warning !",
+    
 ];
 
 /**
