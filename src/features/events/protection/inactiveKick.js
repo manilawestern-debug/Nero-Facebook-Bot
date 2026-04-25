@@ -1,81 +1,40 @@
 "use strict";
 
-const trackers = new Map();
-
-// 🔁 palitan mo lang value dito
-const INACTIVE_TIME = 3 * 24 * 60 * 60 * 1000; // 3 days
-
-function makeKey(threadID, userID) {
-  return `${threadID}-${userID}`;
-}
-
 module.exports = {
-  config: {
-    name: "inactiveKick",
-    description: "Kick inactive users",
-    eventTypes: ["event", "message"],
-    enabled: true,
-  },
+    config: {
+        name: "inactiveKick",
+        interval: 60 * 60 * 1000, // every 1 hour check
+        enabled: true
+    },
 
-  async execute({ api, event, config, logger }) {
-    const botID = api.getCurrentUserID();
+    async execute({ api, db, config }) {
+        if (!db) return;
 
-    // =========================
-    // 🟢 USER ADDED
-    // =========================
-    if (event.logMessageType === "log:subscribe") {
-      const threadID = event.threadID;
-      const added = event.logMessageData?.addedParticipants || [];
+        const limit = 3 * 24 * 60 * 60 * 1000; // 3 DAYS
 
-      for (const u of added) {
-        const userID = u.userFbId;
-        if (!userID) continue;
+        const now = Date.now();
 
-        if (userID == botID) continue;
-        if (config.isAdmin(userID)) continue;
+        const users = await db.collection("activity").find().toArray();
 
-        const key = makeKey(threadID, userID);
+        for (const user of users) {
+            if (!user.lastActive) continue;
 
-        // remove old timer
-        if (trackers.has(key)) {
-          clearTimeout(trackers.get(key));
-          trackers.delete(key);
+            const diff = now - user.lastActive;
+
+            if (diff >= limit) {
+                try {
+                    await api.gcmember("remove", user.userID, user.threadID);
+
+                    await db.collection("activity").deleteOne({
+                        userID: user.userID,
+                        threadID: user.threadID
+                    });
+
+                    console.log(`Kicked inactive user: ${user.userID}`);
+                } catch (err) {
+                    console.log("Kick error:", err.message);
+                }
+            }
         }
-
-        // start timer
-        const timer = setTimeout(async () => {
-          try {
-            await api.gcmember("remove", userID, threadID);
-          } catch (e) {
-            logger.debug("InactiveKick", e.message);
-          } finally {
-            trackers.delete(key);
-          }
-        }, INACTIVE_TIME);
-
-        trackers.set(key, timer);
-      }
-
-      return;
     }
-
-    // =========================
-    // 💬 USER CHAT
-    // =========================
-    if (event.body) {
-      const userID = event.senderID;
-      const threadID = event.threadID;
-
-      if (userID == botID) return;
-      if (config.isAdmin(userID)) return;
-
-      const key = makeKey(threadID, userID);
-
-      // cancel timer if nag chat
-      if (trackers.has(key)) {
-        clearTimeout(trackers.get(key));
-        trackers.delete(key);
-      }
-    }
-  },
 };
