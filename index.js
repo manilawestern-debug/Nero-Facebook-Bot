@@ -92,6 +92,12 @@ let db;
  */
 async function initialize() {
     try {
+
+        // 🔥 CONNECT MONGO
+        db = await connectDB();
+
+        // PHASE 0...
+        const updater = new Updater();
         // ═══════════════════════════════════════════════════════════════════
         // PHASE 0: CHECK FOR UPDATES (Before anything else)
         // ═══════════════════════════════════════════════════════════════════
