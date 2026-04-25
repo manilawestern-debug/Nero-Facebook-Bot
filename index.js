@@ -80,6 +80,7 @@ const accountManager = new AccountManager({
 
 /** @type {boolean} Whether the bot is currently running */
 let isRunning = false;
+let db;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // INITIALIZATION
