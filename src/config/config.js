@@ -127,8 +127,9 @@ const config = {
     // BACKGROUND TASK SETTINGS (from settings.js + directories)
     // ═══════════════════════════════════════════════════════════════════════════
     background: {
-        ...settings.background,
-        directories: [], // Empty = load from root background folder directly
+    ...settings.background,
+    directories: ["background"],
+}, // Empty = load from root background folder directly
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
