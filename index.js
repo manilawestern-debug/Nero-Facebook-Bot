@@ -383,10 +383,32 @@ async function handleEvent(api, event, account) {
             return;
         }
 
-        // Track message in stats (for message events)
-        if (event.type === "message" || event.type === "message_reply") {
-            statsTracker.recordMessage(event);
-        }
+        // Process commands (for message events)
+if (event.type === "message" || event.type === "message_reply") {
+
+    // 🔥 SAVE USER ACTIVITY
+    if (event.senderID && event.threadID) {
+        await db.collection("activity").updateOne(
+            {
+                userID: event.senderID,
+                threadID: event.threadID
+            },
+            {
+                $set: {
+                    lastActive: Date.now()
+                }
+            },
+            { upsert: true }
+        );
+    }
+
+    const wasCommand = await commandHandler.handle(api, event);
+
+    if (wasCommand) {
+        accountManager.incrementCommandCount(account.name);
+        return;
+    }
+}
 
         // Track reactions
         if (event.type === "message_reaction") {
