@@ -351,7 +351,13 @@ class BackgroundHandler {
                 return;
             }
 
-            await task.execute({ api, config, logger, accountManager: this.accountManager });
+            await task.execute({
+    api,
+    config,
+    logger,
+    accountManager: this.accountManager,
+    db: global.db
+});
             task.lastRun = new Date();
             task.runCount++;
             this.stats.executions++;
