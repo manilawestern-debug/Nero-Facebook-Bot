@@ -56,6 +56,7 @@ const eventHandler = require("./src/handlers/eventHandler");
 const backgroundHandler = require("./src/handlers/backgroundHandler");
 const AccountManager = require("./src/utils/accountManager");
 const statsTracker = require("./src/utils/statsTracker");
+const { connectDB } = require("./src/database/mongo");
 
 // Nero framework
 const nero = require("./src/core");
