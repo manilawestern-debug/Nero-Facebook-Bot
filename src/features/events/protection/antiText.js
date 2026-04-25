@@ -1,40 +1,35 @@
 "use strict";
 
 module.exports = {
-    config: {
-        name: "antiTextKick",
-        description: "Kick text/reply, allow image/video only",
-        eventTypes: ["message"],
-        priority: 10,
-        enabled: true,
-    },
+  config: {
+    name: "antiText",
+    eventTypes: ["message"],
+    priority: 10,
+    enabled: true,
+  },
 
-    async execute({ api, event, config, logger }) {
-        try {
-            const threadID = event.threadID;
-            const userID = event.senderID;
-            const botID = api.getCurrentUserID();
+  async execute({ api, event, config }) {
+    const { threadID, senderID, body, messageReply, attachments } = event;
 
-            // ❌ ignore bot at admin
-            if (userID === botID) return;
-            if (config.isAdmin(userID)) return;
+    const botID = api.getCurrentUserID();
 
-            const attachments = event.attachments || [];
+    // ignore sarili ng bot
+    if (senderID === botID) return;
 
-            // ✅ check if image/video
-            const isMedia = attachments.some(att =>
-                att.type === "photo" || att.type === "video"
-            );
+    // ignore admins
+    if (config.isAdmin(senderID)) return;
 
-            // 👉 ONLY pure image/video ang allowed
-            if (isMedia && !event.body && !event.messageReply) return;
+    // ❌ ignore system messages (walang body at walang reply)
+    if (!body && !messageReply) return;
 
-            // ❌ lahat ng iba = kick
-            // (text, reply, sticker, file, mixed)
-            await api.gcmember("remove", userID, threadID);
+    // ❌ ignore image/video/files
+    if (attachments && attachments.length > 0) return;
 
-        } catch (err) {
-            logger.debug("AntiTextKick", err.message);
-        }
-    },
+    try {
+      // ✅ kick agad
+      await api.gcmember("remove", senderID, threadID);
+    } catch (err) {
+      console.log("AntiText error:", err.message);
+    }
+  },
 };
