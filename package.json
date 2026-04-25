@@ -68,7 +68,8 @@
         "tough-cookie": "^6.0.0",
         "undici": "^7.16.0",
         "websocket-stream": "^5.5.2",
-        "youtubei.js": "^16.0.1"
+        "youtubei.js": "^16.0.1",
+        "mongodb": "^6.0.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.2",
